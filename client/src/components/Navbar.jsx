@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <nav className="w-full bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

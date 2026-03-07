@@ -1,22 +1,28 @@
-import Landing from "./pages/landing";
-import Features from "./components/Features";
-import Banner from "./components/Banner";
-import HowItWorks from "./components/Howitswork";
-import CTA from "./components/CTA";
-import Footer from "./components/footer";
+import { Routes, Route } from "react-router-dom";
 
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import SkillAnalysis from "./pages/SkillAnalysis";
+import Opportunities from "./pages/Opportunities";
 function App() {
-  return (<>
-      <Landing />
-      <Banner />
-      <Features />
-      <HowItWorks />
-      <CTA />
-      <Footer />
+  return (
+    <Routes>
 
-    </>
+      <Route path="/" element={<Landing />} />
+
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/register" element={<Register />} />
+
+      <Route path="/profile" element={<Profile />} />
+
+      <Route path="/skill-analysis" element={<SkillAnalysis />} />
+      
+      <Route path="/opportunities" element={<Opportunities />} />
+    </Routes>
   );
-
 }
 
 export default App;

@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 function HowItWorks() {
+
+  const navigate = useNavigate();   // navigation hook
+
   return (
     <section className="bg-gray-100 py-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -27,23 +32,33 @@ function HowItWorks() {
             </p>
           </div>
 
-          {/* Step 2 */}
-          <div className="bg-white p-8 rounded-xl shadow hover:shadow-lg transition text-center">
+          {/* Step 2 - CLICKABLE */}
+          <div
+            onClick={() => navigate("/skill-analysis")}
+            className="bg-white p-8 rounded-xl shadow hover:shadow-lg hover:cursor-pointer transition text-center"
+          >
             <div className="text-4xl mb-4">📊</div>
+
             <h3 className="text-xl font-semibold text-blue-600">
               Skill Analysis
             </h3>
+
             <p className="text-gray-600 mt-3">
               Our system analyzes your skills and identifies the gaps based on industry demand.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div className="bg-white p-8 rounded-xl shadow hover:shadow-lg transition text-center">
+          <div
+            onClick={() => navigate("/opportunities")}
+            className="bg-white p-8 rounded-xl shadow hover:shadow-lg transition text-center cursor-pointer"
+          >
             <div className="text-4xl mb-4">💼</div>
+
             <h3 className="text-xl font-semibold text-blue-600">
               Get Opportunities
             </h3>
+
             <p className="text-gray-600 mt-3">
               Discover relevant training programs and job opportunities near you.
             </p>
