@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillSetu | AI Employability Dashboard</title>
+    <style>
+        :root { --primary: #2563eb; --success: #22c55e; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h2 { color: #1e293b; text-align: center; margin-bottom: 30px; }
+        
+        /* Form Styling */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        input { padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; }
+        input:focus { border-color: var(--primary); }
+        button { grid-column: span 2; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1d4ed8; }
+
+        /* Dashboard Styling (Hidden by default) */
+        #dashboard { display: none; margin-top: 30px; border-top: 2px solid #f1f5f9; padding-top: 20px; }
+        .score-card { text-align: center; padding: 20px; background: #eff6ff; border-radius: 12px; margin-bottom: 20px; }
+        .score-num { font-size: 48px; font-weight: 800; color: var(--primary); }
+        
+        .skill-section { margin-top: 20px; }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .chip { padding: 6px 14px; background: #fee2e2; color: #991b1b; border-radius: 20px; font-size: 14px; font-weight: 500; }
+        .chip.match { background: #dcfce7; color: #166534; }
+
+        .roadmap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .roadmap-item { padding: 15px; border: 1px solid #f1f5f9; border-radius: 10px; background: #fff; }
+        .btn-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SkillSetu Dashboard</h2>
+    
+    <div class="form-grid">
+        <input type="text" id="user_id" placeholder="Your Name">
+        <input type="text" id="job_title" placeholder="Target Job (e.g. Flask Developer)">
+        <input type="text" id="location" placeholder="City">
+        <input type="file" id="resume_file">
+        <button onclick="uploadData()" id="submitBtn">Analyze My Resume</button>
+    </div>
+
+    <div id="dashboard">
+        <div class="score-card">
+            <div class="score-num" id="display_score">0%</div>
+            <p style="color: #64748b; font-weight: 500;">Employability Match Score</p>
+        </div>
+
+        <div class="skill-section">
+            <h3>Skills to Learn</h3>
+            <div id="missing_chips" class="chip-container"></div>
+        </div>
+
+        <div class="skill-section">
+            <h3>Learning Roadmap</h3>
+            <div id="roadmap_items" class="roadmap-grid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function uploadData() {
+        const btn = document.getElementById('submitBtn');
+        const dash = document.getElementById('dashboard');
+        btn.innerText = "Analyzing...";
+        
+        const formData = new FormData();
+        formData.append('user_id', document.getElementById('user_id').value);
+        formData.append('job_title', document.getElementById('job_title').value);
+        formData.append('location', document.getElementById('location').value);
+        formData.append('resume', document.getElementById('resume_file').files[0]);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5001/upload_resume', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            const data = result.data;
+
+            // Update UI
+            document.getElementById('display_score').innerText = data.match_score + "%";
+            
+            // Render Missing Skills
+            const missingDiv = document.getElementById('missing_chips');
+            missingDiv.innerHTML = data.missing_skills.map(s => `<span class="chip">${s}</span>`).join('');
+
+            // Render Roadmap
+            const roadmapDiv = document.getElementById('roadmap_items');
+            roadmapDiv.innerHTML = data.roadmap.map(item => `
+                <div class="roadmap-item">
+                    <strong>${item.skill}</strong><br>
+                    <a href="${item.yt}" target="_blank" class="btn-link">YouTube Course ↗</a>
+                </div>
+            `).join('');
+
+            dash.style.display = "block";
+            btn.innerText = "Analyze My Resume";
+        } catch (error) {
+            alert("Error connecting to server!");
+            btn.innerText = "Analyze My Resume";
+        }
+    }
+</script>
+</body>
+</html>
