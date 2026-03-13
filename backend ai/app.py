@@ -92,6 +92,8 @@ def update_skills():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+        
 @app.route('/update_interest', methods=['POST'])
 def update_interest():
     """Endpoint to change interest field for a user"""
@@ -132,5 +134,6 @@ def update_interest():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
