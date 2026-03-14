@@ -24,7 +24,7 @@ def extract_resume_text(pdf_file):
         for page in doc:
             text += page.get_text()
     return text
-@app.route('/analyze_jobs_with_resume', methods = ['POST'])
+
 @app.route('/analyze_jobs_with_resume', methods=['POST'])
 def analyze_jobs():
     try:
@@ -73,7 +73,8 @@ def analyze_jobs():
             )
             
             # 5. Clean AI Response and Build YouTube Links
-            missing_skills = [s.strip() for s in ai_res.text.split(",") if s.strip()]
+            ai_text = ai_res.text if hasattr(ai_res, "text") else ""
+            missing_skills = [s.strip() for s in ai_text.split(",") if s.strip()]
             skill_links = []
             for skill in missing_skills:
                 query = f"Learn {skill} for beginners tutorial 2026".replace(" ", "+")
