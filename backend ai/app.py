@@ -20,11 +20,18 @@ def analyze_proficiency():
         user_id = data.get("user_id", None) 
         interest_field = data.get("interest_field", "Data Science")
         known_skills = data.get("known_skills", [])
+        known_skills = [s.lower().strip() for s in known_skills]
+
+
         education = data.get("education", "")
         experience_years = data.get("experience_years", 0)
         required_skills = get_ai_generated_required_skills(interest_field)
         score, matched = calculate_user_proficiency(known_skills, required_skills)
         missing = [s['skill'] for s in required_skills if s['skill'] not in matched]
+        print("Required skills:", [s['skill'] for s in required_skills])
+        print("Matched skills:", matched)
+        print("Missing skills:", missing)
+
         roadmap = []
         for s in missing[:5]:
             query = str(s).replace(" ", "+")
