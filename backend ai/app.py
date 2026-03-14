@@ -21,6 +21,7 @@ def analyze_proficiency():
         known_skills = data.get("known_skills", [])
         known_skills = [s.lower().strip() for s in known_skills]
 
+
         education = data.get("education", "")
         experience_years = data.get("experience_years", 0)
         required_skills = get_ai_generated_required_skills(interest_field)

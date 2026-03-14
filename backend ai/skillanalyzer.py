@@ -69,7 +69,7 @@ def calculate_user_proficiency(known_skills, industry_required_skills):
 
             # semantic similarity instead of substring
             sim = util.cos_sim(us_embedding, req_embedding).item()
-            if sim > 0.7:  # threshold for match
+            if sim > 0.5:  # threshold for match
                 matched_skills.append(req['skill'])
                 user_points += req['weight']
                 break
