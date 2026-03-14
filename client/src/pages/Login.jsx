@@ -40,7 +40,7 @@ function Login() {
         // optional: save token
         localStorage.setItem("token", res.data.token);
 
-       navigate("/skill-analysis")// redirect after login
+       navigate("/profile")// redirect after login
 
       }
 

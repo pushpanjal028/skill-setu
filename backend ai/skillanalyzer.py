@@ -1,7 +1,7 @@
 import google.genai as genai
 from sentence_transformers import SentenceTransformer, util
 import torch
-client = genai.Client(api_key="AIzaSyDM-qrxK7rQ2pVX6czxqEkv9kPD7kkAIhU")
+client = genai.Client(api_key="AIzaSyDk3-bPVrlj0zC1gqHO1m0Vq0DU9S6X9tY")
 model_bert = SentenceTransformer('all-MiniLM-L6-v2')
 def get_ai_generated_required_skills(interest_field):
     prompt = (

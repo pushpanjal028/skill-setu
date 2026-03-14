@@ -92,6 +92,8 @@ def update_skills():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+        
 @app.route('/update_interest', methods=['POST'])
 def update_interest():
     """Endpoint to change interest field for a user"""
@@ -132,5 +134,54 @@ def update_interest():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+    
+# ------------------------------
+# Workforce Graph Route
+# ------------------------------
+@app.route('/get_workforce_graphs', methods=['GET'])
+def get_workforce_graphs():
+
+    try:
+        interest_field = request.args.get("job_title", "Data Science")
+
+        required_skills = get_ai_generated_required_skills(interest_field)
+
+        top_market_skills = []
+
+        for s in required_skills[:5]:
+            top_market_skills.append({
+                "skill": s["skill"],
+                "frequency": int(s["weight"] * 20)
+            })
+
+        employment_stats = {
+            "demand_score": 80,
+            "avg_salary_index": 70
+        }
+
+        user_comparison = []
+
+        for s in required_skills[:5]:
+            user_comparison.append({
+                "skill": s["skill"],
+                "proficiency_score": int(s["weight"] * 100)
+            })
+
+        return jsonify({
+            "top_market_skills": top_market_skills,
+            "employment_stats": employment_stats,
+            "user_comparison": user_comparison
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ------------------------------
+# Run Server
+# ------------------------------
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
