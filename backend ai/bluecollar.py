@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import json
-import uuid
 from dotenv import load_dotenv
-from google import genai
+import uuid
+import google.genai as genai
 
 # Load variables from .env
 load_dotenv()
@@ -66,6 +66,7 @@ def get_workers():
 
     return jsonify(data)
 
+
 @app.route("/career_guidance", methods=["POST"])
 def career_guidance():
     req = request.json
@@ -73,7 +74,6 @@ def career_guidance():
     experience = req.get("experience", 0)
     location = req.get("location", "Not specified")
 
-    # Dynamic prompt using the variables from the request
     prompt = (
         f"Suggest career paths, business opportunities, digital tools, "
         f"and training programs for a {profession} with {experience} years "
@@ -81,19 +81,33 @@ def career_guidance():
     )
 
     try:
-        # Using 1.5-flash as 2.5 is not a public stable string yet
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash",
             contents=prompt
         )
+
+        # Safely extract text
+        guidance_text = ""
+        if hasattr(response, "text"):
+            guidance_text = response.text
+        elif hasattr(response, "candidates"):
+            # Some SDK versions return nested candidates
+            guidance_text = response.candidates[0].content.parts[0].text
+        else:
+            guidance_text = str(response)
+
         return jsonify({
             "profession": profession,
             "experience": experience,
             "location": location,
-            "guidance": response.text
+            "guidance": guidance_text
         })
+
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
