@@ -58,7 +58,7 @@ def analyze_jobs_with_resume():
         params = {
             'app_id': ADZUNA_ID,
             'app_key': ADZUNA_KEY,
-            'results_per_page': 5,
+            'results_per_page': 3,
             'what': job_title,
             'where': location,
             'full_time': is_full_time,
@@ -80,20 +80,30 @@ def analyze_jobs_with_resume():
             )
 
             try:
-                ai_res = ai_client.models.generate_content(
-                    model="gemini-2.5-flash",
-                    contents=prompt
-                )
-                if hasattr(ai_res, "text"):
-                       text_out = ai_res.text
-                elif hasattr(ai_res, "candidates"):
-                    text_out = ai_res.candidates[0].content.parts[0].text
-                else:
-                     text_out = ""
+               ai_res = client.models.generate_content(
+               model="models/gemini-2.5-flash",
+               contents=prompt
+           )
+               print("DEBUG Gemini response:", ai_res)
+
+               text_out = getattr(ai_res, "text", None)
+               if not text_out and hasattr(ai_res, "candidates"):
+                  candidates = ai_res.candidates
+                  if candidates and candidates[0].content.parts:
+                    part = candidates[0].content.parts[0]
+                    if hasattr(part, "text"):
+                        text_out = part.text
+
+               if not text_out:
+                  print("DEBUG: No text found in Gemini response")
+                  missing_skills = []
+               else:
+                text_out = text_out.replace("\n", " ").replace("Skills:", "")
                 missing_skills = [s.strip() for s in text_out.split(",") if s.strip()]
             except Exception as e:
-                print("Gemini error:", e)
-                missing_skills = []
+             print("Gemini error:", e)
+             missing_skills = []
+
 
             # 5. Build YouTube Links
             skill_links = []
