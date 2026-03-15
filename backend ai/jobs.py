@@ -80,7 +80,7 @@ def analyze_jobs_with_resume():
             )
 
             try:
-               ai_res = client.models.generate_content(
+               ai_res = ai_client.models.generate_content(
                model="models/gemini-2.5-flash",
                contents=prompt
            )
