@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from skillanalyzer import get_ai_generated_required_skills, calculate_user_proficiency
 from datetime import datetime
 load_dotenv()
+
 app = Flask(__name__)
 CORS(app)
 URI = os.getenv("MONGO_DB_URI")
