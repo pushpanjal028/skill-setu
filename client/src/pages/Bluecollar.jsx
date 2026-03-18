@@ -52,7 +52,7 @@ const BlueCollar = () => {
         experience: "",
         location: ""
       });
-
+      localStorage.setItem("blueCollar", JSON.stringify(data));
       fetchWorkers();
 
     } catch (error) {

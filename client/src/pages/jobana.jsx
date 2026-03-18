@@ -67,8 +67,10 @@ const JobAnalysis = () => {
           skillList.push(skill.skill_name);
         });
       });
-
       setSkills(skillList);
+      // save data
+      localStorage.setItem("jobAnalysis", JSON.stringify(jobsData));
+
 
     } catch (err) {
 
@@ -94,7 +96,7 @@ const JobAnalysis = () => {
 
   return (
 
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen  bg-gray-300 p-10">
 
       <h1 className="text-3xl font-bold text-center mb-8">
         💼 Job Analysis Dashboard
@@ -163,7 +165,7 @@ const JobAnalysis = () => {
 
       {skills.length > 0 && (
 
-        <div className="bg-white shadow-md p-6 mt-10 rounded-lg max-w-4xl mx-auto">
+        <div className="bg-white shadow-md p-6 mt-10 md:grid-flow-row rounded-lg max-w-4xl mx-auto">
 
           <h2 className="text-xl font-semibold mb-4 text-center">
             📊 Missing Skills Graph
@@ -179,7 +181,7 @@ const JobAnalysis = () => {
 
       {jobs.length > 0 && (
 
-        <div className="mt-10 grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <div className="mt-10 grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
           {jobs.map((job, index) => (
 

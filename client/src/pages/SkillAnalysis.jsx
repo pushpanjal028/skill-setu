@@ -30,6 +30,8 @@ const SkillAnalysis = () => {
       );
 
       setResult(response.data);
+      //save correct data
+    localStorage.setItem("skillAnalysis", JSON.stringify(response.data));
 
     } catch (error) {
       console.error("API Error:", error);

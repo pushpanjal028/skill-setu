@@ -1,69 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Profile = () => {
+function Profile() {
 
-  const user = {
-    name: "Skill Setu User",
-    email: "skillsetu@gmail.com",
-    education: "B.Tech / MCA Student",
-    experience: "1 Year",
-    skills: ["HTML", "CSS", "JavaScript", "React", "Node.js", "MongoDB"],
-    interest: "AI / Data Science"
-  };
+  const [user] = useState(() => {
+    const data = localStorage.getItem("user");
+    return data ? JSON.parse(data) : [];
+  });
+
+  const [jobData] = useState(() => {
+    const data = localStorage.getItem("jobAnalysis");
+    return data ? JSON.parse(data) : [];
+  });
+
+  const [skills] = useState(() => {
+    const data = localStorage.getItem("skills");
+    return data ? JSON.parse(data) : [];
+  });
+
+  const [skillAnalysis] = useState(() => {
+    const data = localStorage.getItem("skillAnalysis");
+    return data ? JSON.parse(data) : [];
+  });
+
+  const [blueCollar] = useState(() => {
+    const data = localStorage.getItem("blueCollar");
+    return data ? JSON.parse(data) : [];
+  });
 
   return (
+    <div className="min-h-screen bg-gray-100 p-8">
 
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+      <div className="max-w-6xl mx-auto space-y-6">
 
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-lg">
-
-        <div className="text-center mb-6">
-
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            alt="profile"
-            className="w-24 mx-auto mb-3"
-          />
-
-          <h1 className="text-2xl font-bold">{user.name}</h1>
-          <p className="text-gray-500">{user.email}</p>
-
+        {/* USER INFO */}
+        <div className="bg-white p-6 rounded-lg shadow text-center">
+          <h2 className="text-2xl font-bold">{user?.name}</h2>
+          <p className="text-gray-500">{user?.email}</p>
         </div>
 
-        <div className="space-y-3">
+        {/* JOB ANALYSIS */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-3">
+            💼 Job Analysis Progress
+          </h2>
 
-          <p><b>Education:</b> {user.education}</p>
-
-          <p><b>Experience:</b> {user.experience}</p>
-
-          <p><b>Interest Field:</b> {user.interest}</p>
-
+          <p>Total Jobs Analyzed: {jobData.length}</p>
+          <p>Total Missing Skills: {skills.length}</p>
         </div>
 
-        <div className="mt-5">
+        {/* SKILL ANALYSIS */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-3">
+            🧠 Skill Analysis
+          </h2>
 
-          <h2 className="text-lg font-semibold mb-2">Skills</h2>
+          {skillAnalysis ? (
+            <pre className="text-sm text-gray-600">
+              {JSON.stringify(skillAnalysis, null, 2)}
+            </pre>
+          ) : (
+            <p>No data yet</p>
+          )}
+        </div>
 
-          <div className="flex flex-wrap gap-2">
+        {/* BLUE COLLAR */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-3">
+            🔧 Blue Collar Work
+          </h2>
 
-            {user.skills.map((skill, index) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
-              >
-                {skill}
-              </span>
-            ))}
-
-          </div>
-
+          {blueCollar ? (
+            <pre className="text-sm text-gray-600">
+              {JSON.stringify(blueCollar, null, 2)}
+            </pre>
+          ) : (
+            <p>No data yet</p>
+          )}
         </div>
 
       </div>
 
     </div>
-
   );
-};
+}
 
 export default Profile;
