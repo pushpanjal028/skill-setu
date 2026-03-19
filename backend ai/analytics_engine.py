@@ -73,10 +73,10 @@ def analyze_jobs():
 
         for job in raw_jobs:
             job_desc = job.get('description', '')
-            prompt = f"""Identify key technical skills missing in this Resume for this Job.
+            prompt = (f"""Identify key technical skills missing in this Resume for this Job.
             Resume: {resume_text[:1500]}
             Job Description: {job_desc}
-            Return ONLY the missing skill names separated by commas"""
+            Return ONLY the missing skill names separated by commas""")
 
             ai_res = ai_client.models.generate_content(
                 model="models/gemini-2.5-flash",
@@ -151,7 +151,7 @@ def get_market_analytics(job_title, location, user_id):
     
     # Force the model to be strict
     ai_res = ai_client.models.generate_content(
-        model="gemini-1.5-flash", # Use 1.5-flash for stability
+        model="gemini-2.5-flash", # Use 1.5-flash for stability
         contents=prompt
     )
 
