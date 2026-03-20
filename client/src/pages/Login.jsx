@@ -42,7 +42,7 @@ function Login() {
         localStorage.setItem("user", JSON.stringify(res.data.user));
 
         window.location.href = "/"; // 🔥 reload + redirect
-        navigate("/profile")// redirect after login
+        navigate("/Profile")// redirect after login
 
       }
 

@@ -81,6 +81,22 @@ function HowItWorks() {
             </p>
           </div>
           
+          {/* Step 5 */}
+
+           <div
+            onClick={() => navigate("/orgDashboard")}
+            className="bg-white p-8 rounded-xl shadow hover:shadow-lg transition text-center cursor-pointer">
+            <div className="text-4xl mb-4">📊</div>
+
+            <h3 className="text-xl font-semibold text-blue-600">
+           Government Dashboard
+            </h3>
+
+            <p className="text-gray-600 mt-3">
+              Discover relevant training programs and job opportunities near you.
+            </p>
+          </div>
+          
 
         </div>
 

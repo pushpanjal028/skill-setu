@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import Lang from "../components/Lang"; // ✅ FIXED IMPORT
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [user, setUser] = useState(() => {
-  const storedUser = localStorage.getItem("user");
-  return storedUser ? JSON.parse(storedUser) : null;
-});
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -16,7 +17,7 @@ function Navbar() {
     setUser(user.name);
     navigate("/");
   };
-const isLoggedIn = !!localStorage.getItem("token");
+  const isLoggedIn = !!localStorage.getItem("token");
   // Active link style
   const activeClass = (path) =>
     location.pathname === path
@@ -24,6 +25,7 @@ const isLoggedIn = !!localStorage.getItem("token");
       : "text-gray-700 hover:text-blue-600";
 
   return (
+
     <nav className="w-full sticky top-0 z-50 backdrop-blur-md bg-white/70 shadow-sm border-b">
 
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -70,9 +72,9 @@ const isLoggedIn = !!localStorage.getItem("token");
             <div className="flex items-center gap-3">
 
               {/* Profile */}
-              <div 
-              onClick={()=> navigate ("/Profile")}
-              className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
+              <div
+                onClick={() => navigate("/Profile")}
+                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full">
                 <span className="text-sm font-medium">
                   👤 {user.name}
                 </span>
@@ -90,7 +92,12 @@ const isLoggedIn = !!localStorage.getItem("token");
           )}
 
         </div>
-        
+
+      </div>
+
+      <div className="flex justify-between items-center p-4 bg-gray-900 text-white">
+        <h1 className="text-xl font-bold">Skill Setu</h1>
+        <Lang />
       </div>
 
     </nav>

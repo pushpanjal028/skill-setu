@@ -191,6 +191,18 @@ def get_workforce_graphs():
 # ------------------------------
 # Run Server
 # ------------------------------
+@app.route('/profile')
+def profile():
+    user_id = request.args.get("userId")
+
+    # fetch from DB
+    user = collection.find_one({"_id": user_id})
+
+    return jsonify({
+        "user": user
+    })
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
     
