@@ -16,21 +16,21 @@ import OrgDashboard from "./pages/orgDashboard";
 function App() {
 
   // ✅ FIX: Move useEffect INSIDE component
-  useEffect(() => {
-    const lang = localStorage.getItem("lang");
+  // useEffect(() => {
+  //   const lang = localStorage.getItem("lang");
 
-    if (lang) {
-      const interval = setInterval(() => {
-        const select = document.querySelector(".goog-te-combo");
+  //   if (lang) {
+  //     const interval = setInterval(() => {
+  //       const select = document.querySelector(".goog-te-combo");
 
-        if (select) {
-          select.value = lang;
-          select.dispatchEvent(new Event("change"));
-          clearInterval(interval);
-        }
-      }, 500);
-    }
-  }, []);
+  //       if (select) {
+  //         select.value = lang;
+  //         select.dispatchEvent(new Event("change"));
+  //         clearInterval(interval);
+  //       }
+  //     }, 500);
+  //   }
+  // }, []);
 
   return (
     <Routes>

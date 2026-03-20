@@ -95,10 +95,10 @@ function Navbar() {
 
       </div>
 
-      <div className="flex justify-between items-center p-4 bg-gray-900 text-white">
+      {/* <div className="flex justify-between items-center p-4 bg-gray-900 text-white">
         <h1 className="text-xl font-bold">Skill Setu</h1>
         <Lang />
-      </div>
+      </div> */}
 
     </nav>
   );
