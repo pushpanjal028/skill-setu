@@ -219,6 +219,16 @@ def get_workforce_graph():
         logging.error(str(e))
         return jsonify({"error": str(e)}), 500
 
+# @app.route("/profile/<user_id>", methods=["GET"])
+# def get_profile(user_id):
+#     return jsonify({
+#         "user": {"name": "Test", "email": "test@gmail.com"},
+#         "jobData": [],
+#         "skills": [],
+#         "skillAnalysis": None,
+#         "blueCollar": None
+#     })        
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

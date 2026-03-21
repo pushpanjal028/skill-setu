@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "http://127.0.0.1:5002";
 
 const BlueCollar = () => {
   const [workers, setWorkers] = useState([]);

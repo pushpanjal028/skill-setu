@@ -30,7 +30,7 @@ const JobAnalysis = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/analyze_jobs_with_resume",
+        "http://localhost:5001/analyze_jobs_with_resume",
         formData,
         {
           headers: {
