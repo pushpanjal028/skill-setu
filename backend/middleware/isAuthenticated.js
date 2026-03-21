@@ -13,6 +13,7 @@ export const isAuthenticated = async(req, res, next)=>{
         }
         const token = authHeader.split(" ")[1];
 
+        // eslint-disable-next-line no-undef
         jwt.verify(token, process.env.SECRET_KEY, async (err, decoded)=>{
             if (err) {
                 if(err.name === "TokenExpiredError"){

@@ -31,9 +31,10 @@ function Register() {
         }
         
       })
-     if(res.data.success){
-       navigate("/verify-email");
-     }
+      if(res.data.success){
+        navigate("/verify-email");
+      }
+      localStorage.setItem("user", JSON.stringify(res.data.user));
     } catch (err) {
       console.log(err);
     }

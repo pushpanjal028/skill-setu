@@ -1,0 +1,102 @@
+[
+  {
+    "field": "Data Science",
+    "skills": [
+      {"skill": "python", "weight": 0.95},
+      {"skill": "pandas", "weight": 0.9},
+      {"skill": "numpy", "weight": 0.9},
+      {"skill": "machine learning", "weight": 0.95},
+      {"skill": "deep learning", "weight": 0.9},
+      {"skill": "statistics", "weight": 0.9},
+      {"skill": "data visualization", "weight": 0.85},
+      {"skill": "matplotlib", "weight": 0.8},
+      {"skill": "seaborn", "weight": 0.8},
+      {"skill": "sql", "weight": 0.9},
+      {"skill": "feature engineering", "weight": 0.85},
+      {"skill": "model evaluation", "weight": 0.85},
+      {"skill": "nlp", "weight": 0.85},
+      {"skill": "tensorflow", "weight": 0.8},
+      {"skill": "pytorch", "weight": 0.8}
+    ]
+  },
+  {
+    "field": "Web Development",
+    "skills": [
+      {"skill": "html", "weight": 0.95},
+      {"skill": "css", "weight": 0.95},
+      {"skill": "javascript", "weight": 0.95},
+      {"skill": "react", "weight": 0.9},
+      {"skill": "node.js", "weight": 0.9},
+      {"skill": "express.js", "weight": 0.85},
+      {"skill": "mongodb", "weight": 0.85},
+      {"skill": "rest api", "weight": 0.9},
+      {"skill": "git", "weight": 0.9},
+      {"skill": "github", "weight": 0.85},
+      {"skill": "responsive design", "weight": 0.85},
+      {"skill": "typescript", "weight": 0.8},
+      {"skill": "next.js", "weight": 0.8},
+      {"skill": "authentication", "weight": 0.85},
+      {"skill": "deployment", "weight": 0.8}
+    ]
+  },
+  {
+    "field": "Android Development",
+    "skills": [
+      {"skill": "java", "weight": 0.9},
+      {"skill": "kotlin", "weight": 0.95},
+      {"skill": "android sdk", "weight": 0.9},
+      {"skill": "xml layouts", "weight": 0.85},
+      {"skill": "firebase", "weight": 0.9},
+      {"skill": "rest api integration", "weight": 0.85},
+      {"skill": "mvvm architecture", "weight": 0.85},
+      {"skill": "ui/ux design", "weight": 0.8},
+      {"skill": "debugging", "weight": 0.85},
+      {"skill": "version control", "weight": 0.85},
+      {"skill": "gradle", "weight": 0.8},
+      {"skill": "push notifications", "weight": 0.8},
+      {"skill": "sqlite", "weight": 0.8},
+      {"skill": "jetpack compose", "weight": 0.85},
+      {"skill": "testing", "weight": 0.75}
+    ]
+  },
+  {
+    "field": "Cybersecurity",
+    "skills": [
+      {"skill": "network security", "weight": 0.95},
+      {"skill": "ethical hacking", "weight": 0.9},
+      {"skill": "penetration testing", "weight": 0.9},
+      {"skill": "cryptography", "weight": 0.9},
+      {"skill": "firewalls", "weight": 0.85},
+      {"skill": "intrusion detection systems", "weight": 0.85},
+      {"skill": "linux", "weight": 0.9},
+      {"skill": "risk assessment", "weight": 0.85},
+      {"skill": "vulnerability analysis", "weight": 0.9},
+      {"skill": "siem tools", "weight": 0.8},
+      {"skill": "incident response", "weight": 0.85},
+      {"skill": "malware analysis", "weight": 0.8},
+      {"skill": "cloud security", "weight": 0.85},
+      {"skill": "security compliance", "weight": 0.8},
+      {"skill": "python scripting", "weight": 0.8}
+    ]
+  },
+  {
+    "field": "AI/ML Engineer",
+    "skills": [
+      {"skill": "python", "weight": 0.95},
+      {"skill": "machine learning", "weight": 0.95},
+      {"skill": "deep learning", "weight": 0.95},
+      {"skill": "tensorflow", "weight": 0.9},
+      {"skill": "pytorch", "weight": 0.9},
+      {"skill": "nlp", "weight": 0.9},
+      {"skill": "computer vision", "weight": 0.85},
+      {"skill": "data preprocessing", "weight": 0.9},
+      {"skill": "model deployment", "weight": 0.85},
+      {"skill": "mlops", "weight": 0.85},
+      {"skill": "docker", "weight": 0.85},
+      {"skill": "kubernetes", "weight": 0.8},
+      {"skill": "cloud platforms", "weight": 0.85},
+      {"skill": "statistics", "weight": 0.9},
+      {"skill": "linear algebra", "weight": 0.9}
+    ]
+  }
+]

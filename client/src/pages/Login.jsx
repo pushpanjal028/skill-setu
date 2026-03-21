@@ -39,8 +39,10 @@ function Login() {
 
         // optional: save token
         localStorage.setItem("token", res.data.token);
-
-       navigate("/profile")// redirect after login
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        
+        window.location.href = "/"; // 🔥 reload + redirect
+        navigate("/Profile")// redirect after login
 
       }
 

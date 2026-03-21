@@ -30,6 +30,8 @@ const SkillAnalysis = () => {
       );
 
       setResult(response.data);
+      //save correct data
+    localStorage.setItem("skillAnalysis", JSON.stringify(response.data));
 
     } catch (error) {
       console.error("API Error:", error);
@@ -96,7 +98,7 @@ const SkillAnalysis = () => {
 
         {result && (
 
-          <div className="mt-8">
+          <div className="mt-8 grid md:grid-cols-2 gap-10 justify-end p-6">
 
             <div className="bg-blue-50 p-4 rounded-lg mb-4">
 

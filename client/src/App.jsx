@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -10,38 +11,32 @@ import Profile from "./pages/Profile";
 import WorkforceGraphs from "./pages/WorkforceGraph";
 import JobAnalysis from "./pages/jobana";
 import Bluecollar from "./pages/Bluecollar";
+import OrgDashboard from "./pages/orgDashboard";
 
 function App() {
+  const location = useLocation();
+
   return (
-    <Routes>
+    <>
+      {/* ❌ Hide Navbar on Home page */}
+      {location.pathname !== "/" && <Navbar />}
 
-      <Route path="/" element={<Landing />} />
-
-      <Route path="/login" element={<Login />} />
-
-      <Route path="/register" element={<Register />} />
-
-      <Route path="/profile" element={<Profile />} />
-
-      <Route path="/skill-analysis" element={<SkillAnalysis />} />
-
-      <Route path="/verify-email" element={<VerifyEmail />} />
-       
-      <Route path="/verify/:token" element={<Verify />} />
-
-      <Route path ="/profile/:userId" element={<Profile />} />
-
-      <Route path="/workforce-graphs" element={<WorkforceGraphs />} />
-
-      <Route path="/jobana" element={<JobAnalysis />} />
-      
-      <Route path="/Bluecollar" element={<Bluecollar />} />
- 
-       
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/skill-analysis" element={<SkillAnalysis />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify/:token" element={<Verify />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/workforce-graphs" element={<WorkforceGraphs />} />
+        <Route path="/jobana" element={<JobAnalysis />} />
+        <Route path="/Bluecollar" element={<Bluecollar />} />
+        <Route path="/orgDashboard" element={<OrgDashboard />} />
+      </Routes>
+    </>
   );
 }
 
 export default App;
-
-
