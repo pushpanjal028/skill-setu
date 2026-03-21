@@ -40,7 +40,7 @@ function Login() {
         // optional: save token
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-
+        
         window.location.href = "/"; // 🔥 reload + redirect
         navigate("/Profile")// redirect after login
 
