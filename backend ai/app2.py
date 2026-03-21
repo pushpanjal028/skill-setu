@@ -97,8 +97,8 @@ def analyze_proficiency():
                 {"$set": result_doc},
                 upsert=True
             )
-        else:
-            users_collection.insert_one(result_doc)
+        # else:
+        #     users_collection.insert_one(result_doc)
         return jsonify({
             "status": "success",
             "match_score": f"{score}%",
