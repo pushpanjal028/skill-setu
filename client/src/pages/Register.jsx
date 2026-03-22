@@ -1,45 +1,57 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-
+import axios from "axios";
 
 function Register() {
 
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",       // ✅ FIXED (was username)
     email: "",
     password: ""
-  })
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((pre) => ({
-      ...pre,
-      [name]: value
-    }))
-  }
 
-  const handleSubmit = async(e) => {
-    e.preventDefault()
-    console.log(formData);
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const res = await axios.post(`http://localhost:8000/user/register`, formData,{
-        headers:{
-          "Content-Type": "application/json"
+
+      const res = await axios.post(
+        "http://localhost:8000/user/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
         }
-        
-      })
-      if(res.data.success){
+      );
+
+      if (res.data.success) {
+
+        // ✅ SAVE EVERYTHING PROPERLY
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem("email", res.data.user.email); // 🔥 IMPORTANT
+
+        console.log("Saved Email:", res.data.user.email);
+
+        // ✅ redirect
         navigate("/verify-email");
       }
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-    } catch (err) {
-      console.log(err);
-    }
 
-  }
+    } catch (err) {
+      console.log(err.response?.data || err);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -51,18 +63,16 @@ function Register() {
         </h2>
 
         <input
-          id=" Fullname"
           type="text"
-          name="username"
-          value={formData.username}
+          name="name"   // ✅ FIXED
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Enter your Full-Name"
+          placeholder="Enter your Full Name"
           required
           className="w-full border p-3 mb-4 rounded"
         />
 
         <input
-          id="Email"
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -74,17 +84,17 @@ function Register() {
 
         <input
           type="password"
-          placeholder="Password"
-          required
           name="password"
           value={formData.password}
           onChange={handleChange}
+          placeholder="Password"
+          required
           className="w-full border p-3 mb-4 rounded"
         />
 
         <button
           onClick={handleSubmit}
-          type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-indigo-500"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-indigo-500"
         >
           Register
         </button>
@@ -98,7 +108,6 @@ function Register() {
           >
             Login
           </span>
-
         </p>
 
       </div>

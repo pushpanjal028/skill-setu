@@ -6,7 +6,8 @@ const JobAnalysis = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("full_time"); // 🔥 NEW
-  const [resume, setResume] = useState(null);
+  const [resume, setResume] = useState();
+  const [name, setName] = useState("");
 
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ const JobAnalysis = () => {
       );
 
       setJobs(res.data.jobs || []);
-      
+
 
     } catch (error) {
       console.error(error.response?.data || error.message);
@@ -63,6 +64,16 @@ const JobAnalysis = () => {
       >
 
         {/* JOB TITLE */}
+
+        <input
+          type="text"
+          placeholder="Enter your Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="w-full border p-3 mb-4 rounded"
+        />
+
         <input
           type="text"
           placeholder="Job Title"

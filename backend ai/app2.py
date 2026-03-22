@@ -68,7 +68,7 @@ def analyze_proficiency():
         if not request.is_json:
             return jsonify({"error": "Invalid JSON"}), 400
         data = request.get_json()
-        user_id = data.get("user_id")
+        email = data.get("email")
         interest_field = data.get("interest_field", "Data Science")
         known_skills = normalize_skills(data.get("known_skills", []))
         education = data.get("education", "")
@@ -81,7 +81,7 @@ def analyze_proficiency():
             interest_field
         )
         result_doc = {
-            "user_id": user_id,
+            "email": email,
             "education": education,
             "experience_years": experience_years,
             "interest_field": interest_field,
@@ -91,14 +91,15 @@ def analyze_proficiency():
             "roadmap": roadmap,
             "timestamp": datetime.utcnow()
         }
-        if user_id:
+        if email:
             users_collection.update_one(
-                {"user_id": user_id},
+                {"email": email},
                 {"$set": result_doc},
                 upsert=True
             )
         # else:
         #     users_collection.insert_one(result_doc)
+        
         return jsonify({
             "status": "success",
             "match_score": f"{score}%",
@@ -111,23 +112,28 @@ def analyze_proficiency():
 @app.route('/update_skills', methods=['POST'])
 def update_skills():
     try:
-        if not request.is_json:
-            return jsonify({"error": "Invalid JSON"}), 400
         data = request.get_json()
-        user_id = data.get("user_id")
+
+        email = data.get("email")   # ✅ use email instead
         new_skills = normalize_skills(data.get("new_skills", []))
-        if not user_id:
-            return jsonify({"error": "user_id required"}), 400
-        user = users_collection.find_one({"user_id": user_id})
+
+        if not email:
+            return jsonify({"error": "email required"}), 400
+
+        user = users_collection.find_one({"email": email})
+
         if not user:
             return jsonify({"error": "User not found"}), 404
+
         updated_skills = list(set(user.get("known_skills", []) + new_skills))
+
         score, matched, roadmap = generate_analysis(
             updated_skills,
             user.get("interest_field", "Data Science")
         )
+
         users_collection.update_one(
-            {"user_id": user_id},
+            {"email": email},
             {
                 "$set": {
                     "known_skills": updated_skills,
@@ -138,14 +144,15 @@ def update_skills():
                 }
             }
         )
+
         return jsonify({
             "status": "success",
             "match_score": f"{score}%",
             "matched_skills": matched,
             "roadmap": roadmap
         })
+
     except Exception as e:
-        logging.error(str(e))
         return jsonify({"error": str(e)}), 500
 @app.route('/update_interest', methods=['POST'])
 def update_interest():
@@ -228,6 +235,36 @@ def get_workforce_graph():
 #         "skillAnalysis": None,
 #         "blueCollar": None
 #     })        
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    try:
+        email = request.args.get("email")
+
+        if not email:
+            return jsonify({"error": "Email required"}), 400
+
+        user = users_collection.find_one({"email": email})
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify({
+            "status": "success",
+            "user": {
+                "name": user.get("name"),
+                "email": user.get("email")
+            },
+            "skills": user.get("known_skills", []),
+            "skillAnalysis": user.get("matched_skills", []),
+            "jobData": user.get("job_data", []),
+            "blueCollar": {
+                "jobs": user.get("blue_collar_jobs", [])
+            }
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

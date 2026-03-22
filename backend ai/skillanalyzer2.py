@@ -20,7 +20,7 @@ def get_ai_generated_required_skills(interest_field):
         )
     try:
         response = client.models.generate_content(
-            model = "models/gemini-2.5-flash",
+            model = "models/gemini-3.1-flash Lite",
             contents = prompt
         )
         text_out = getattr(response, "text",None)

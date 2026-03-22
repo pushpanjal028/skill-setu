@@ -15,7 +15,6 @@ const BlueCollar = () => {
     location: ""
   });
 
-  // Fetch workers
   const fetchWorkers = async () => {
     try {
       const res = await axios.get(`${API_BASE}/workers`);
@@ -26,14 +25,9 @@ const BlueCollar = () => {
   };
 
   useEffect(() => {
-  const loadWorkers = async () => {
-    const res = await axios.get(`${API_BASE}/workers`);
-    setWorkers(res.data);
-  };
+    fetchWorkers();
+  }, []);
 
-  loadWorkers();
-}, []);
-  // Form change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -41,30 +35,21 @@ const BlueCollar = () => {
     });
   };
 
-  // Add worker
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      await axios.post(`${API_BASE}/add_worker`, formData);
+  const user = JSON.parse(localStorage.getItem("user"));
 
-      // Fix: correct localStorage usage
-      localStorage.setItem("blueCollar", JSON.stringify(formData));
-
-      setFormData({
-        name: "",
-        profession: "",
-        experience: "",
-        location: ""
-      });
-
-      fetchWorkers();
-    } catch (error) {
-      alert("Error saving worker");
-    }
+  const newWorker = {
+    ...formData,
+    user_id: user?._id   // 🔥 IMPORTANT
   };
 
-  // Get AI guidance
+  await axios.post("http://127.0.0.1:5002/add_worker", newWorker);
+
+  fetchWorkers();
+};
+
   const getGuidance = async (worker) => {
     setLoading(true);
     setGuidance(null);
@@ -84,139 +69,139 @@ const BlueCollar = () => {
     setLoading(false);
   };
 
-  // Safe parsing (handles string or JSON)
-  const parsedGuidance =
-    guidance && typeof guidance.guidance === "string"
-      ? JSON.parse(guidance.guidance)
-      : guidance?.guidance;
+  let parsedGuidance = null;
+
+  try {
+    if (guidance?.guidance) {
+      parsedGuidance =
+        typeof guidance.guidance === "string"
+          ? JSON.parse(guidance.guidance)
+          : guidance.guidance;
+    }
+  } catch (e) {
+    console.error(e);
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
+
         <h1 className="text-4xl font-bold text-center text-blue-600 mb-10">
-          Blue Collar Career Portal
+          🔧 Blue Collar Career Portal
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Worker Registration */}
+
+          {/* FORM */}
           <div className="bg-white p-6 rounded-xl shadow">
             <h2 className="text-xl font-semibold mb-4">
               Register Worker
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border p-3 rounded"
-                required
-              />
+              <input name="name" placeholder="Name"
+                value={formData.name} onChange={handleChange}
+                className="w-full border p-3 rounded" required />
 
-              <input
-                name="profession"
-                placeholder="Profession"
-                value={formData.profession}
-                onChange={handleChange}
-                className="w-full border p-3 rounded"
-                required
-              />
+              <input name="profession" placeholder="Profession"
+                value={formData.profession} onChange={handleChange}
+                className="w-full border p-3 rounded" required />
 
-              <input
-                name="experience"
-                type="number"
-                placeholder="Experience (years)"
-                value={formData.experience}
-                onChange={handleChange}
-                className="w-full border p-3 rounded"
-              />
+              <input name="experience" type="number"
+                placeholder="Experience"
+                value={formData.experience} onChange={handleChange}
+                className="w-full border p-3 rounded" />
 
-              <input
-                name="location"
-                placeholder="Location"
-                value={formData.location}
-                onChange={handleChange}
-                className="w-full border p-3 rounded"
-              />
+              <input name="location" placeholder="Location"
+                value={formData.location} onChange={handleChange}
+                className="w-full border p-3 rounded" />
 
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700"
-              >
+              <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
                 Save Worker
               </button>
             </form>
           </div>
 
-          {/* Worker List */}
+          {/* RIGHT SIDE */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Loading */}
+
+            {/* LOADING */}
             {loading && (
-              <div className="bg-blue-100 p-4 rounded text-center">
-                AI is generating career guidance...
+              <div className="bg-blue-100 p-4 rounded text-center font-semibold">
+                AI is generating guidance...
               </div>
             )}
 
-            {/* Guidance Display */}
+            {/* 🔥 MODERN GUIDANCE UI */}
             {guidance && parsedGuidance && (
-              <div className="bg-white p-6 rounded-xl shadow border-l-4 border-blue-600">
-                <h3 className="font-bold mb-4 text-lg">
-                  Guidance for {guidance.profession}
+              <div className="bg-white p-6 rounded-2xl shadow-xl border">
+
+                <h3 className="text-2xl font-bold text-blue-600 mb-6">
+                  🚀 Career Guidance for {guidance.profession}
                 </h3>
 
-                <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
+
                   {/* Career Paths */}
-                  <div>
-                    <h4 className="font-semibold">Career Paths</h4>
-                    <ul className="list-disc ml-5">
-                      {parsedGuidance["Career Paths"]?.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
+                  <div className="bg-blue-50 p-4 rounded-xl">
+                    <h4 className="font-semibold text-blue-700 mb-3">
+                      📈 Career Paths
+                    </h4>
+                    {parsedGuidance["Career Paths"]?.map((item, i) => (
+                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
+                        {item}
+                      </div>
+                    ))}
                   </div>
 
-                  {/* Business Opportunities */}
-                  <div>
-                    <h4 className="font-semibold">Business Opportunities</h4>
-                    <ul className="list-disc ml-5">
-                      {parsedGuidance["Business Opportunities"]?.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
+                  {/* Business */}
+                  <div className="bg-green-50 p-4 rounded-xl">
+                    <h4 className="font-semibold text-green-700 mb-3">
+                      💼 Business Opportunities
+                    </h4>
+                    {parsedGuidance["Business Opportunities"]?.map((item, i) => (
+                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
+                        {item}
+                      </div>
+                    ))}
                   </div>
 
                   {/* Tools */}
-                  <div>
-                    <h4 className="font-semibold">Digital Tools</h4>
-                    <ul className="list-disc ml-5">
-                      {parsedGuidance["Recommended Digital Tools"]?.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
+                  <div className="bg-yellow-50 p-4 rounded-xl">
+                    <h4 className="font-semibold text-yellow-700 mb-3">
+                      🛠️ Digital Tools
+                    </h4>
+                    {parsedGuidance["Recommended Digital Tools"]?.map((item, i) => (
+                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
+                        {item}
+                      </div>
+                    ))}
                   </div>
 
                   {/* Training */}
-                  <div>
-                    <h4 className="font-semibold">Training Programs</h4>
-                    <ul className="list-disc ml-5">
-                      {parsedGuidance["Training Programs"]?.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
+                  <div className="bg-purple-50 p-4 rounded-xl">
+                    <h4 className="font-semibold text-purple-700 mb-3">
+                      🎓 Training Programs
+                    </h4>
+                    {parsedGuidance["Training Programs"]?.map((item, i) => (
+                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
+                        {item}
+                      </div>
+                    ))}
                   </div>
+
                 </div>
 
                 <button
                   onClick={() => setGuidance(null)}
-                  className="text-red-500 mt-4"
+                  className="mt-6 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                 >
                   Close
                 </button>
               </div>
             )}
 
-            {/* Workers Table */}
+            {/* WORKERS TABLE */}
             <div className="bg-white rounded-xl shadow">
               <table className="w-full text-left">
                 <thead className="bg-gray-100">
@@ -231,12 +216,8 @@ const BlueCollar = () => {
                   {workers.map((worker) => (
                     <tr key={worker._id} className="border-t">
                       <td className="p-4">
-                        <div className="font-semibold">
-                          {worker.name}
-                        </div>
-                        <div className="text-sm text-gray-400">
-                          {worker.location}
-                        </div>
+                        <div className="font-semibold">{worker.name}</div>
+                        <div className="text-sm text-gray-400">{worker.location}</div>
                       </td>
 
                       <td className="p-4">
@@ -254,6 +235,7 @@ const BlueCollar = () => {
                     </tr>
                   ))}
                 </tbody>
+
               </table>
             </div>
 

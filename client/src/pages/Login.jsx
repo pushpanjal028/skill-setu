@@ -20,39 +20,70 @@ function Login() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
+  //   try {
 
-      const res = await axios.post(
-        "http://localhost:8000/user/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
+  //     const res = await axios.post(
+  //       "http://localhost:8000/user/login",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         }
+  //       }
+  //     );
 
-      if (res.data.success) {
+  //     if (res.data.success) {
 
-        // optional: save token
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+  //       // optional: save token
+  //       localStorage.setItem("token", res.data.token);
+  //       localStorage.setItem("user", JSON.stringify(res.data.user));
+  //       localStorage.setItem("email", res.data.user.email);
         
-        window.location.href = "/"; // 🔥 reload + redirect
-        navigate("/Profile")// redirect after login
+  //       window.location.href = "/"; // 🔥 reload + redirect
+  //       navigate("/Profile")// redirect after login
 
+  //     }
+
+  //   } catch (err) {
+
+  //     console.log(err.response?.data || err);
+
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/user/login",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
+    );
 
-    } catch (err) {
+    if (res.data.success) {
 
-      console.log(err.response?.data || err);
+      // ✅ SAVE DATA PROPERLY
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("email", res.data.user.email);
 
+      console.log("Saved Email:", res.data.user.email); // debug
+
+      // ✅ REDIRECT CORRECTLY
+      navigate("/profile");
     }
-  };
 
+  } catch (err) {
+    console.log(err.response?.data || err);
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
 

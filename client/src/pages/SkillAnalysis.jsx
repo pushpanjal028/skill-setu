@@ -8,39 +8,41 @@ const SkillAnalysis = () => {
   const [skills, setSkills] = useState("");
   const [education, setEducation] = useState("");
   const [experience, setExperience] = useState("");
+  const [name, setName] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const email = localStorage.getItem("email"); // ✅ GET EMAIL
 
-    try {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/analyze_proficiency",
+      {
+        email: email, // ✅ SEND EMAIL
+        name: name,   // ✅ SEND NAME
+        interest_field: interest,
+        known_skills: skills.split(",").map(s => s.trim()),
+        education: education,
+        experience_years: Number(experience)
+      }
+    );
 
-      const response = await axios.post(
-        "http://localhost:5000/analyze_proficiency",
-        {
-          user_id: "user123",
-          interest_field: interest,
-          known_skills: skills.split(",").map(s => s.trim()),
-          education: education,
-          experience_years: Number(experience)
-        }
-      );
+    setResult(response.data);
 
-      setResult(response.data);
-      //save correct data
+    // ✅ Save locally for quick UI
     localStorage.setItem("skillAnalysis", JSON.stringify(response.data));
 
-    } catch (error) {
-      console.error("API Error:", error);
-      alert("Backend not running or API error");
-    }
+  } catch (error) {
+    console.error(error);
+    alert("API Error");
+  }
 
-    setLoading(false);
-  };
-
+  setLoading(false);
+};
   return (
 
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
@@ -52,6 +54,15 @@ const SkillAnalysis = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
+          <input
+            type="text"
+            placeholder="Enter your Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full border p-3 mb-4 rounded"
+          />
 
           <input
             className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
