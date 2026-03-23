@@ -15,24 +15,17 @@ function Profile() {
 
   // 🔐 PROTECT ROUTE
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
+    if (!localStorage.getItem("user")) {
       navigate("/login");
     }
   }, []);
 
-  // 📡 FETCH PROFILE + EMAIL BASED BLUE COLLAR
+  // 📡 FETCH DATA
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const email = localStorage.getItem("email");
 
-        if (!email) {
-          navigate("/login");
-          return;
-        }
-
-        // ✅ PROFILE (5004)
         const res = await axios.get("http://localhost:5004/profile", {
           params: { email }
         });
@@ -46,22 +39,17 @@ function Profile() {
         setSkillAnalysis(data.skillAnalysis || []);
         setJobData(data.jobData || []);
 
-        // 🔥 EMAIL BASED FILTER (FINAL FIX)
+        // 🔥 BLUE COLLAR
         const userId = data?.user?._id;
-
-        console.log("USER ID:", userId);
 
         const workersRes = await axios.get("http://127.0.0.1:5002/workers", {
           params: { user_id: userId }
         });
 
-        console.log("FILTERED WORKERS:", workersRes.data);
-
         setBlueCollar(workersRes.data || []);
 
       } catch (error) {
-        console.error("Error fetching profile:", error);
-        alert("Backend error");
+        console.error(error);
       }
 
       setLoading(false);
@@ -70,29 +58,17 @@ function Profile() {
     fetchProfile();
   }, []);
 
-  // ❌ BLOCK UI IF NOT LOGGED IN
-  const isLoggedIn = localStorage.getItem("user");
-  if (!isLoggedIn) return null;
+  if (loading) return <h2 className="text-center mt-10">Loading...</h2>;
 
-  // ⏳ LOADING
-  if (loading) {
-    return (
-      <div className="text-center mt-20 text-xl font-semibold">
-        Loading profile...
-      </div>
-    );
-  }
-
-  // 🚪 LOGOUT
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("email");
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-xl p-8">
+
+      <div className="max-w-6xl mx-auto bg-white p-8 rounded-xl shadow">
 
         {/* HEADER */}
         <div className="text-center mb-8">
@@ -122,74 +98,98 @@ function Profile() {
 
           {/* SKILLS */}
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-3">🧠 Your Skills</h3>
+            <h3 className="font-semibold mb-3">🧠 Your Skills</h3>
 
             {skills.length > 0 ? (
-              <ul className="list-disc list-inside">
-                {skills.map((skill, i) => (
-                  <li key={i}>{skill}</li>
-                ))}
+              <ul className="list-disc ml-5">
+                {skills.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
-            ) : (
-              <p className="text-gray-500">No skills added</p>
-            )}
+            ) : <p>No skills</p>}
           </div>
 
           {/* SKILL ANALYSIS */}
           <div className="bg-green-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-3">✅ Skill Analysis</h3>
+            <h3 className="font-semibold mb-3">✅ Skill Analysis</h3>
 
             {skillAnalysis.length > 0 ? (
-              <ul className="list-disc list-inside">
-                {skillAnalysis.map((skill, i) => (
-                  <li key={i}>{skill}</li>
-                ))}
+              <ul className="list-disc ml-5">
+                {skillAnalysis.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
-            ) : (
-              <p className="text-gray-500">No analysis available</p>
-            )}
-          </div>
-
-          {/* JOB DATA */}
-          <div className="bg-yellow-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-3">💼 Job Analysis</h3>
-
-            {jobData.length > 0 ? (
-              jobData.map((job, i) => (
-                <div key={i} className="mb-2 p-2 bg-white rounded shadow">
-                  <p className="font-semibold">{job.title}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No job analysis available</p>
-            )}
-          </div>
-
-          {/* 🔥 BLUE COLLAR FINAL */}
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-3">
-              🔧 Your Blue Collar Data
-            </h3>
-
-            {blueCollar.length > 0 ? (
-              blueCollar.map((worker, i) => (
-                <div key={i} className="mb-2 p-2 bg-white rounded shadow">
-                  <p className="font-semibold">{worker.profession}</p>
-                  <p className="text-sm text-gray-500">👤 {worker.name}</p>
-                  <p className="text-xs text-gray-400">📍 {worker.location}</p>
-                  <p className="text-xs text-gray-400">
-                    🧰 {worker.experience} years
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">
-                No data found for your account
-              </p>
-            )}
+            ) : <p>No analysis</p>}
           </div>
 
         </div>
+
+        {/* 🔥 JOB ANALYSIS (UPGRADED UI) */}
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4 text-yellow-600">
+            💼 Job Analysis
+          </h3>
+
+          {jobData.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-4">
+
+              {jobData.map((job, i) => (
+                <div key={i} className="bg-yellow-50 p-4 rounded shadow">
+
+                  <h4 className="font-bold text-blue-600">
+                    {job.title}
+                  </h4>
+
+                  <p className="text-gray-500">{job.company}</p>
+
+                  {/* Missing Skills */}
+                  {job.missingSkills?.length > 0 && (
+                    <>
+                      <p className="mt-2 font-semibold">Missing Skills:</p>
+                      <ul className="list-disc ml-5 text-sm">
+                        {job.missingSkills.map((s, idx) => (
+                          <li key={idx}>{s}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
+                  {/* Apply */}
+                  {job.apply_link && (
+                    <a
+                      href={job.apply_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block mt-3 bg-green-600 text-white text-center py-1 rounded"
+                    >
+                      Apply
+                    </a>
+                  )}
+
+                </div>
+              ))}
+
+            </div>
+          ) : (
+            <p>No job analysis available</p>
+          )}
+        </div>
+
+        {/* 🔧 BLUE COLLAR */}
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4 text-purple-600">
+            🔧 Blue Collar Data
+          </h3>
+
+          {blueCollar.length > 0 ? (
+            blueCollar.map((w, i) => (
+              <div key={i} className="bg-purple-50 p-3 mb-2 rounded shadow">
+                <p className="font-semibold">{w.profession}</p>
+                <p>👤 {w.name}</p>
+                <p>📍 {w.location}</p>
+              </div>
+            ))
+          ) : (
+            <p>No data found</p>
+          )}
+        </div>
+
       </div>
     </div>
   );

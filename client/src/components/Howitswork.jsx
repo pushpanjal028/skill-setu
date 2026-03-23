@@ -29,7 +29,7 @@ function HowItWorks() {
             <div className="text-4xl mb-4">📊</div>
 
             <h3 className="text-xl font-semibold text-blue-600">
-              Skill Analysis
+              Skill Gap Analysis
             </h3>
 
             <p className="text-gray-600 mt-3">
@@ -44,7 +44,7 @@ function HowItWorks() {
             <div className="text-4xl mb-4">💼</div>
 
             <h3 className="text-xl font-semibold text-blue-600">
-              Get Opportunities
+              Job Analysis
             </h3>
 
             <p className="text-gray-600 mt-3">

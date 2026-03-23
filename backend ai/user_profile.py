@@ -116,10 +116,11 @@ def get_profile():
             "message": "Profile loaded"
         })
 
+
+
     except Exception as e:
         logging.error(f"Profile Error: {e}")
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=5004)
