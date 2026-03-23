@@ -118,7 +118,7 @@ Jobs:
                 "apply_link": job.get('redirect_url')
             })
         db["Skills"].update_one(
-            {"user_id": user_id},
+            {"email": user_id},
             {
                 "$set": {
                     "last_active": datetime.now(timezone.utc),

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -12,166 +11,168 @@ const SkillAnalysis = () => {
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
 
-  const email = localStorage.getItem("email"); // ✅ GET EMAIL
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/analyze_proficiency",
-      {
-        email: email, // ✅ SEND EMAIL
-        name: name,   // ✅ SEND NAME
-        interest_field: interest,
-        known_skills: skills.split(",").map(s => s.trim()),
-        education: education,
-        experience_years: Number(experience)
-      }
-    );
+    const email = localStorage.getItem("email");
 
-    setResult(response.data);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/analyze_proficiency",
+        {
+          email: email,
+          name: name,
+          interest_field: interest,
+          known_skills: skills.split(",").map(s => s.trim()),
+          education: education,
+          experience_years: Number(experience)
+        }
+      );
 
-    // ✅ Save locally for quick UI
-    localStorage.setItem("skillAnalysis", JSON.stringify(response.data));
+      setResult(response.data);
+      localStorage.setItem("skillAnalysis", JSON.stringify(response.data));
 
-  } catch (error) {
-    console.error(error);
-    alert("API Error");
-  }
+    } catch (error) {
+      console.error(error);
+      alert("API Error");
+    }
 
-  setLoading(false);
-};
+    setLoading(false);
+  };
+
   return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 p-6">
 
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
+        🧠 Skill Gap Analysis
+      </h1>
 
-      <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-xl">
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-2xl shadow-xl max-w-xl mx-auto space-y-5"
+      >
 
-        <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
-          🚀 Skill Setu – AI Skill Analyzer
-        </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-500">👤</span>
           <input
             type="text"
-            placeholder="Enter your Full Name"
+            placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full border p-3 mb-4 rounded"
+            className="w-full pl-10 border p-3 rounded-lg"
           />
+        </div>
 
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-500">🎯</span>
           <input
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             placeholder="Interest Field (Ex: Data Science)"
             value={interest}
             onChange={(e) => setInterest(e.target.value)}
             required
+            className="w-full pl-10 border p-3 rounded-lg"
           />
+        </div>
 
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-500">🛠️</span>
           <input
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
-            placeholder="Known Skills (Ex: python, react, node)"
+            placeholder="Known Skills (comma separated)"
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
             required
+            className="w-full pl-10 border p-3 rounded-lg"
           />
+        </div>
 
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-500">🎓</span>
           <input
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
-            placeholder="Education (Ex: B.Tech CSE)"
+            placeholder="Education"
             value={education}
             onChange={(e) => setEducation(e.target.value)}
+            className="w-full pl-10 border p-3 rounded-lg"
           />
+        </div>
 
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-500">⏳</span>
           <input
-            className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="number"
             placeholder="Experience (Years)"
             value={experience}
             onChange={(e) => setExperience(e.target.value)}
+            className="w-full pl-10 border p-3 rounded-lg"
           />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition"
-          >
-            {loading ? "Analyzing..." : "Analyze Skills"}
-          </button>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white w-full py-3 rounded-lg shadow-md">
+          {loading ? "Analyzing..." : "Analyze Skill Gap"}
+        </button>
 
-        </form>
+      </form>
 
-        {result && (
+      {/* RESULT */}
+      {result && (
+        <div className="mt-10 max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
 
-          <div className="mt-8 grid md:grid-cols-2 gap-10 justify-end p-6">
+          {/* MATCH SCORE */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg text-center">
+            <h2 className="text-xl font-semibold text-blue-600">
+              🎯 Match Score
+            </h2>
+            <p className="text-3xl font-bold mt-2">
+              {result.match_score}%
+            </p>
+          </div>
 
-            <div className="bg-blue-50 p-4 rounded-lg mb-4">
+          {/* MATCHED SKILLS */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg">
+            <h3 className="font-semibold text-lg mb-3 text-green-600">
+              ✅ Matched Skills
+            </h3>
+            <ul className="list-disc ml-5 text-gray-600">
+              {result.matched_skills.map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
+          </div>
 
-              <h2 className="text-xl font-semibold text-blue-700">
-                🎯 Match Score: {result.match_score}
-              </h2>
+          {/* ROADMAP */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg">
+            <h3 className="font-semibold text-lg mb-3 text-purple-600">
+              📚 Learning Roadmap
+            </h3>
 
-            </div>
-
-            <div className="mb-4">
-
-              <h3 className="font-semibold text-lg mb-2">
-                ✅ Matched Skills
-              </h3>
-
-              <ul className="list-disc list-inside text-gray-700">
-
-                {result.matched_skills.map((skill, index) => (
-                  <li key={index}>{skill}</li>
-                ))}
-
-              </ul>
-
-            </div>
-
-            <div>
-
-              <h3 className="font-semibold text-lg mb-2">
-                📚 Learning Roadmap
-              </h3>
-
-              <ul className="space-y-2">
-
-                {result.roadmap.map((item, index) => (
-                  <li key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-md">
-
-                    <span>{item.skill}</span>
-
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 font-medium hover:underline"
-                    >
-                      Learn
-                    </a>
-
-                  </li>
-                ))}
-
-              </ul>
-
-            </div>
+            <ul className="space-y-3">
+              {result.roadmap.map((item, index) => (
+                <li key={index} className="bg-gray-100 p-3 rounded flex justify-between">
+                  <span>{item.skill}</span>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 font-semibold"
+                  >
+                    Learn
+                  </a>
+                </li>
+              ))}
+            </ul>
 
           </div>
 
-        )}
-
-      </div>
+        </div>
+      )}
 
     </div>
-
   );
 };
 

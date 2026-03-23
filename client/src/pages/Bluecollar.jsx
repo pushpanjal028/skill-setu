@@ -20,7 +20,7 @@ const BlueCollar = () => {
       const res = await axios.get(`${API_BASE}/workers`);
       setWorkers(res.data);
     } catch (error) {
-      console.error("Backend not running", error);
+      console.error(error);
     }
   };
 
@@ -35,20 +35,18 @@ const BlueCollar = () => {
     });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  const newWorker = {
-    ...formData,
-    user_id: user?._id   // 🔥 IMPORTANT
+    await axios.post(`${API_BASE}/add_worker`, {
+      ...formData,
+      user_id: user?._id
+    });
+
+    fetchWorkers();
   };
-
-  await axios.post("http://127.0.0.1:5002/add_worker", newWorker);
-
-  fetchWorkers();
-};
 
   const getGuidance = async (worker) => {
     setLoading(true);
@@ -63,7 +61,7 @@ const handleSubmit = async (e) => {
 
       setGuidance(res.data);
     } catch (error) {
-      alert("AI guidance error");
+      alert("AI error");
     }
 
     setLoading(false);
@@ -79,169 +77,155 @@ const handleSubmit = async (e) => {
           : guidance.guidance;
     }
   } catch (e) {
-    console.error(e);
+    console("error")
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-100 to-blue-200 p-6">
 
-        <h1 className="text-4xl font-bold text-center text-blue-600 mb-10">
-          🔧 Blue Collar Career Portal
-        </h1>
+      <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">
+        🔧 Blue Collar Career Portal
+      </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-8">
 
-          {/* FORM */}
-          <div className="bg-white p-6 rounded-xl shadow">
-            <h2 className="text-xl font-semibold mb-4">
-              Register Worker
-            </h2>
+        {/* FORM */}
+        <div className="bg-white p-6 rounded-2xl shadow-xl">
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input name="name" placeholder="Name"
-                value={formData.name} onChange={handleChange}
-                className="w-full border p-3 rounded" required />
+          <h2 className="text-xl font-semibold mb-4 text-blue-600">
+            Register Worker
+          </h2>
 
-              <input name="profession" placeholder="Profession"
-                value={formData.profession} onChange={handleChange}
-                className="w-full border p-3 rounded" required />
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-              <input name="experience" type="number"
-                placeholder="Experience"
-                value={formData.experience} onChange={handleChange}
-                className="w-full border p-3 rounded" />
+            <input
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border p-3 rounded"
+              required
+            />
 
-              <input name="location" placeholder="Location"
-                value={formData.location} onChange={handleChange}
-                className="w-full border p-3 rounded" />
+            <input
+              name="profession"
+              placeholder="Profession"
+              value={formData.profession}
+              onChange={handleChange}
+              className="w-full border p-3 rounded"
+              required
+            />
 
-              <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
-                Save Worker
-              </button>
-            </form>
-          </div>
+            <input
+              name="experience"
+              type="number"
+              placeholder="Experience"
+              value={formData.experience}
+              onChange={handleChange}
+              className="w-full border p-3 rounded"
+            />
 
-          {/* RIGHT SIDE */}
-          <div className="lg:col-span-2 space-y-6">
+            <input
+              name="location"
+              placeholder="Location"
+              value={formData.location}
+              onChange={handleChange}
+              className="w-full border p-3 rounded"
+            />
 
-            {/* LOADING */}
-            {loading && (
-              <div className="bg-blue-100 p-4 rounded text-center font-semibold">
-                AI is generating guidance...
-              </div>
-            )}
+            <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
+              Save Worker
+            </button>
 
-            {/* 🔥 MODERN GUIDANCE UI */}
-            {guidance && parsedGuidance && (
-              <div className="bg-white p-6 rounded-2xl shadow-xl border">
-
-                <h3 className="text-2xl font-bold text-blue-600 mb-6">
-                  🚀 Career Guidance for {guidance.profession}
-                </h3>
-
-                <div className="grid md:grid-cols-2 gap-6">
-
-                  {/* Career Paths */}
-                  <div className="bg-blue-50 p-4 rounded-xl">
-                    <h4 className="font-semibold text-blue-700 mb-3">
-                      📈 Career Paths
-                    </h4>
-                    {parsedGuidance["Career Paths"]?.map((item, i) => (
-                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Business */}
-                  <div className="bg-green-50 p-4 rounded-xl">
-                    <h4 className="font-semibold text-green-700 mb-3">
-                      💼 Business Opportunities
-                    </h4>
-                    {parsedGuidance["Business Opportunities"]?.map((item, i) => (
-                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tools */}
-                  <div className="bg-yellow-50 p-4 rounded-xl">
-                    <h4 className="font-semibold text-yellow-700 mb-3">
-                      🛠️ Digital Tools
-                    </h4>
-                    {parsedGuidance["Recommended Digital Tools"]?.map((item, i) => (
-                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Training */}
-                  <div className="bg-purple-50 p-4 rounded-xl">
-                    <h4 className="font-semibold text-purple-700 mb-3">
-                      🎓 Training Programs
-                    </h4>
-                    {parsedGuidance["Training Programs"]?.map((item, i) => (
-                      <div key={i} className="bg-white p-2 rounded mb-2 shadow-sm">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-
-                <button
-                  onClick={() => setGuidance(null)}
-                  className="mt-6 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                >
-                  Close
-                </button>
-              </div>
-            )}
-
-            {/* WORKERS TABLE */}
-            <div className="bg-white rounded-xl shadow">
-              <table className="w-full text-left">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="p-4">Worker</th>
-                    <th className="p-4">Profession</th>
-                    <th className="p-4 text-right">Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {workers.map((worker) => (
-                    <tr key={worker._id} className="border-t">
-                      <td className="p-4">
-                        <div className="font-semibold">{worker.name}</div>
-                        <div className="text-sm text-gray-400">{worker.location}</div>
-                      </td>
-
-                      <td className="p-4">
-                        {worker.profession} ({worker.experience}y)
-                      </td>
-
-                      <td className="p-4 text-right">
-                        <button
-                          onClick={() => getGuidance(worker)}
-                          className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                          Analyze
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-
-              </table>
-            </div>
-
-          </div>
+          </form>
         </div>
+
+        {/* RIGHT SIDE */}
+        <div className="lg:col-span-2 space-y-6">
+
+          {loading && (
+            <div className="bg-blue-100 p-4 rounded text-center font-semibold">
+              AI is generating guidance...
+            </div>
+          )}
+
+          {/* GUIDANCE */}
+          {guidance && parsedGuidance && (
+            <div className="bg-white p-6 rounded-2xl shadow-xl">
+
+              <h3 className="text-2xl font-bold text-blue-600 mb-6">
+                🚀 Career Guidance
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+
+                {Object.entries(parsedGuidance).map(([key, values], i) => (
+                  <div key={i} className="bg-gray-100 p-4 rounded-xl">
+                    <h4 className="font-semibold mb-2">{key}</h4>
+
+                    {values.map((item, idx) => (
+                      <div key={idx} className="bg-white p-2 rounded mb-2 shadow-sm">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+
+              </div>
+
+              <button
+                onClick={() => setGuidance(null)}
+                className="mt-6 bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Close
+              </button>
+
+            </div>
+          )}
+
+          {/* WORKERS */}
+          <div className="bg-white rounded-2xl shadow-xl">
+
+            <table className="w-full text-left">
+              <thead className="bg-blue-100">
+                <tr>
+                  <th className="p-4">Worker</th>
+                  <th className="p-4">Profession</th>
+                  <th className="p-4 text-right">Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {workers.map((worker) => (
+                  <tr key={worker._id} className="border-t">
+                    <td className="p-4">
+                      <div className="font-semibold">{worker.name}</div>
+                      <div className="text-sm text-gray-500">{worker.location}</div>
+                    </td>
+
+                    <td className="p-4">
+                      {worker.profession} ({worker.experience}y)
+                    </td>
+
+                    <td className="p-4 text-right">
+                      <button
+                        onClick={() => getGuidance(worker)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      >
+                        Analyze
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+          </div>
+
+        </div>
+
       </div>
+
     </div>
   );
 };
