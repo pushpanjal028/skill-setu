@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 //for regiser
 import { verifyMail } from "../emailVerify/verifyMail.js";
 import { Session } from "../models/sessionModel.js";
@@ -147,6 +148,7 @@ export const loginUser = async (req, res) => {
         // await user.save();
 
         // Generate tokens 
+        // eslint-disable-next-line no-undef
         const accessToken = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "10d" });
         const refreshToken = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "20d" });
 

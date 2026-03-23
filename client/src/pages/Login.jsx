@@ -24,6 +24,7 @@ function Login() {
     e.preventDefault();
 
     try {
+
       const res = await axios.post(
         "http://localhost:8000/user/login",
         formData,
@@ -35,73 +36,70 @@ function Login() {
       );
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
+
+        // optional: save token
+        localStorage.setItem("token", res.data.acessToken);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("email", res.data.user.email);
+        localStorage.setItem("token", res.data.token);
 
-        navigate("/profile");
+       navigate("/profile")// redirect after login
+
       }
 
     } catch (err) {
+
       console.log(err.response?.data || err);
+
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-blue-00">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
-      {/* WHITE CARD */}
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-96">
+      <div className="bg-white p-10 rounded-xl shadow-lg w-96">
 
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
-          🔐 Login
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Login
         </h2>
 
-        {/* EMAIL */}
-        <div className="relative mb-4">
-          <span className="absolute left-3 top-3 text-gray-500">📧</span>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="abc@gmail.com"
-            required
-            className="w-full pl-10 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="abc@gmail.com"
+          required
+          className="w-full border p-3 mb-4 rounded"
+        />
 
-        {/* PASSWORD */}
-        <div className="relative mb-4">
-          <span className="absolute left-3 top-3 text-gray-500">🔒</span>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-            className="w-full pl-10 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+          className="w-full border p-3 mb-4 rounded"
+        />
 
-        {/* BUTTON */}
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition shadow-md"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-indigo-500"
         >
           Login
         </button>
 
-        {/* REGISTER */}
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm">
           Don't have an account?
+
           <span
             onClick={() => navigate("/register")}
-            className="text-blue-600 font-semibold cursor-pointer ml-1"
+            className="text-blue-600 cursor-pointer ml-1"
           >
             Register
           </span>
+
         </p>
 
       </div>

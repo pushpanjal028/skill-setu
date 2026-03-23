@@ -1,121 +1,103 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from 'axios';
+
 
 function Register() {
 
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: ""
-  });
+  })
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((pre) => ({
+      ...pre,
       [name]: value
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    console.log(formData);
     try {
-      const res = await axios.post(
-        "http://localhost:8000/user/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
+      const res = await axios.post(`http://localhost:8000/user/register`, formData,{
+        headers:{
+          "Content-Type": "application/json"
         }
-      );
-
-      if (res.data.success) {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        localStorage.setItem("email", res.data.user.email);
-
-        navigate("/verify-email");
-      }
-
+        
+      })
+     if(res.data.success){
+       navigate("/verify-email");
+     }
     } catch (err) {
-      console.log(err.response?.data || err);
+      console.log(err);
     }
-  };
+
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 via-blue-300 to-blue-400">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
-      {/* WHITE CARD */}
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-96">
+      <div className="bg-white p-10 rounded-xl shadow-lg w-96">
 
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
-          📝 Create Profile
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Create Profile
         </h2>
 
-        {/* NAME */}
-        <div className="relative mb-4">
-          <span className="absolute left-3 top-3 text-gray-500">👤</span>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your Full Name"
-            required
-            className="w-full pl-10 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          id=" Fullname"
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Enter your Full-Name"
+          required
+          className="w-full border p-3 mb-4 rounded"
+        />
 
-        {/* EMAIL */}
-        <div className="relative mb-4">
-          <span className="absolute left-3 top-3 text-gray-500">📧</span>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="abc@gmail.com"
-            required
-            className="w-full pl-10 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          id="Email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          type="email"
+          placeholder="abc@gmail.com"
+          required
+          className="w-full border p-3 mb-4 rounded"
+        />
 
-        {/* PASSWORD */}
-        <div className="relative mb-4">
-          <span className="absolute left-3 top-3 text-gray-500">🔒</span>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-            className="w-full pl-10 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          required
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full border p-3 mb-4 rounded"
+        />
 
-        {/* BUTTON */}
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition shadow-md"
+          type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-indigo-500"
         >
           Register
         </button>
 
-        {/* LOGIN LINK */}
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm">
           Already have an account?
+
           <span
             onClick={() => navigate("/login")}
-            className="text-blue-600 font-semibold cursor-pointer ml-1"
+            className="text-blue-600 cursor-pointer ml-1"
           >
             Login
           </span>
+
         </p>
 
       </div>

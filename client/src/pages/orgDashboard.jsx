@@ -4,7 +4,7 @@ export default function OrgDashboard() {
 
   const handleDownload = async () => {
     try {
-      const res = await fetch("http://localhost:5005/download-csv"); // 🔥 FIXED URL
+      const res = await fetch("http://127.0.0.1:5005/download-csv"); //FIXED URL
       
       if (!res.ok) {
         alert("Download failed");

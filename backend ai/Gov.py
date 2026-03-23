@@ -12,14 +12,12 @@ CORS(app) # Allows your frontend to talk to this backend
 
 # MongoDB Connection
 MONGO_URI = os.getenv("MONGO_DB_URI")
-client = MongoClient("mongo_uri")
+client = MongoClient(MONGO_URI)
 db = client['SkillSetuDB']
 collection = db['users']
 
 
-@app.route('/')
-def home():
-    return "Server Running on 5005 ✅"
+
 
 @app.route('/download-csv', methods=['GET'])
 def download_csv():
@@ -48,6 +46,9 @@ def download_csv():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/')
+def home():
+    return "Server Running on 5005 ✅"
 
 if __name__ == "__main__":
     app.run(port=5005, debug=True)
