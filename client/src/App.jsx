@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Translator from "./Translator"; // ✅ ADD THIS
 
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -18,6 +19,9 @@ function App() {
 
   return (
     <>
+      {/* ✅ ADD THIS (Translator visible everywhere) */}
+      <Translator />
+
       {/* ❌ Hide Navbar on Home page */}
       {location.pathname !== "/" && <Navbar />}
 

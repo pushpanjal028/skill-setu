@@ -13,10 +13,10 @@ CORS(app)
 ai_client = genai.Client(api_key=os.getenv("GOOGLE_KEY"))
 ADZUNA_ID = os.getenv("ADZUNA_ID")
 ADZUNA_KEY = os.getenv("ADZUNA_KEY")
-URI = os.getenv("MONGO_URI")
+URI = os.getenv("MONGO_DB_URI")
 client = MongoClient(URI) if URI else None
-db = client['SkillSetuDB'] if client else None
-user_collection = db['Users'] if db else None
+db = client['SkillSetuDB'] if client is not None else None
+user_collection = db['Users'] if db is not None else None
 def fetch_jobs(job_title,location =""):
     url = f"https://api.adzuna.com/v1/api/jobs/in/search/1"
     params = {
@@ -40,7 +40,7 @@ def get_workforce_graphs():
         return jsonify({"error":"job_title required"}),400
     jobs = fetch_jobs(job_title,location)
     job_texts = " ".join([job.get("description","")for job in jobs[:10]])
-    prompt_skills = textwrap.dedent(f""" Extract top 10 technical skills for the following job descriptions. Job Descriptions:{job_texts} Return as JSON: {{"top-market_skills": [{{"skill":"skill_name","frequency":value}}....]}}""").strip()
+    prompt_skills = textwrap.dedent(f""" Extract top 10 technical skills for the following job descriptions. Job Descriptions:{job_texts} Return as JSON: {{"top_market_skills": [{{"skill":"skill_name","frequency":value}}....]}}""").strip()
     try:
         ai_res = ai_client.models.generate_content(
             model = "models/gemini-2.5-flash",
@@ -67,7 +67,7 @@ def get_workforce_graphs():
                 user_skills_json.append({"skill":skill,"proficiency_score":random.randint(50,100)})
     stats = {
         "employment_stats": {
-            "demand_score":random.randit(60,100),
+            "demand_score":random.randint(60,100),
             "avg_salary_index":random.randint(50,100)
         }
     }
@@ -76,7 +76,7 @@ def get_workforce_graphs():
         "user_comparison":user_skills_json,
         "employment_stats":stats["employment_stats"]
     })
-@app("/add_user_skills",methods=["POST"])
+@app.route("/add_user_skills",methods=["POST"])
 def add_user_skills():
     data = request.json
     user_id = data.get("user_id")
