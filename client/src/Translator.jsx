@@ -20,20 +20,20 @@ export default function LanguageSwitcher() {
   ];
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", marginLeft: "1400px", top: "55px" }}>
       {/* Button */}
       <button
         onClick={() => setOpen(!open)}
         style={{
           background: "#e0f2fe",
           border: "1px solid #bae6fd",
-          padding: "6px 12px",
+          padding: "0px 12px",
           borderRadius: "8px",
           cursor: "pointer",
           fontWeight: "500",
         }}
       >
-        🌐 Language
+        Language
       </button>
 
       {/* Dropdown */}
