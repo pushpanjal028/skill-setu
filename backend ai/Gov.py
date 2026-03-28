@@ -11,9 +11,9 @@ app = Flask(__name__)
 CORS(app) # Allows your frontend to talk to this backend
 
 # MongoDB Connection
-MONGO_URI = os.getenv("MONGO_DB_URI")
+MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
-db = client['SkillSetuDB']
+db = client['Database']
 collection = db['users']
 
 
