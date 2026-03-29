@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Translator from "./Translator"; // ✅ ADD THIS
+import Translator from "./Translator"; // ✅
 import Hiddentransalator from "./Hiddentransalator"
 
 import Landing from "./pages/Landing";
