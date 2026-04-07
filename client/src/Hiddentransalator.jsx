@@ -23,7 +23,7 @@ export default function GoogleTranslateLoader() {
   }, []);
 
   return (
-    // 👇 hidden container (UI show नहीं होगा)
+    // 👇 hidden container (UI dosen't show )
     <div id="google_translate_element" style={{ display: "none" }}></div>
   );
 }
