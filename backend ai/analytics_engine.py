@@ -21,7 +21,7 @@ ADZUNA_ID = os.getenv("ADZUNA_ID")
 ADZUNA_KEY = os.getenv("ADZUNA_KEY")
 
 # MongoDB connection
-URI = "mongodb+srv://coder_hack:Sankalp2026@cluster0.slx9flr.mongodb.net/?appName=Cluster0"
+URI = os.getenv("Mongo_DB_URI")
 client = MongoClient(URI)
 db = client['SkillSetuDB']
 collection = db['Skills']
